@@ -11,16 +11,14 @@ struct RawArgs {
     length: Option<u8>,
 }
 
-struct Args {
-    length: u8
+pub struct Args {
+    pub length: u8
 }
 
 fn main() {
     let args: Args = parse_args();
 
-    println!("Welcome to Hangman!");
-    println!("The secret word is {} letters long.", args.length);
-    hangman::run();
+    hangman::run(args.length);
 }
 
 fn parse_args() -> Args {
