@@ -17,6 +17,8 @@ pub fn run(secret_len: u8) {
         }
     };
 
+    game.print_game_screen();
+
     match result {
         GameResult::Guessed => {
             println!("You guessed the secret word: {}", game.get_secret())

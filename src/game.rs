@@ -120,16 +120,12 @@ impl Game {
     pub fn print_game_screen(&self) {
         println!(r" 
 ==================================================
-                {}                   
-                                                  
-                    +---+
-                    |   |
-                    |   O
-                    |  /|\
-                    |  / 
-                    |
-                =========                                              
-    {}", self.get_secret_word_progress(), self.get_string_of_previous_guesses());
+                {}                                                             
+    {}                                             
+    {}", 
+    self.get_secret_word_progress(), 
+    self.render_hangman_graphic(), 
+    self.get_string_of_previous_guesses());
     }
 
     /// Get string representing progress on the guess of the secret word
@@ -149,6 +145,24 @@ impl Game {
 
     fn get_string_of_previous_guesses(&self) -> String {
         self.previous_guesses.iter().map(|x| format!("{} ", x.to_uppercase().next().unwrap())).collect()
+    }
+
+    fn render_hangman_graphic(&self) -> String {
+        
+        let head: &str = if self.num_guesses < 6 {"O"} else {" "};
+        let body: &str = if self.num_guesses < 5 {"|"} else {" "};
+        let l_arm: &str = if self.num_guesses < 4 {"/"} else {" "};
+        let r_arm: &str = if self.num_guesses < 3 {"\\"} else {" "};
+        let l_leg: &str = if self.num_guesses < 2 {"/"} else {" "};
+        let r_leg: &str = if self.num_guesses < 1 {"\\"} else {" "};
+        format!("
+                    +---+
+                    |   |
+                    |   {h}
+                    |  {lA}{b}{rA}
+                    |  {lL} {rL}
+                    |
+                =========", h=head, b=body, lA=l_arm, rA=r_arm, lL=l_leg, rL=r_leg)
     }
 }
 
