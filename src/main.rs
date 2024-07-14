@@ -8,11 +8,11 @@ use clap::Parser;
 #[command(version, long_about = None)]
 struct RawArgs {
     /// Length of secret word
-    length: Option<u8>,
+    length: Option<usize>,
 }
 
 pub struct Args {
-    pub length: u8
+    pub length: usize
 }
 
 fn main() {
@@ -24,10 +24,10 @@ fn main() {
 fn parse_args() -> Args {
     let raw: RawArgs = RawArgs::parse();
 
-    let raw_len: u8 = raw.length.unwrap_or(4);
+    let raw_len: usize = raw.length.unwrap_or(4);
 
-    if raw_len > 6 || raw_len < 3 {
-        panic!("Hidden word length must be 3 <= x <= 6, not {} characters.", raw_len);
+    if raw_len < 3 {
+        panic!("Hidden word length must be at least 3 characters.");
     }
 
     Args {

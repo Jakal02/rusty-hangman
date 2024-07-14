@@ -1,8 +1,9 @@
 
+pub mod dictionary;
 pub mod game;
 use game::{Game, GameResult};
 
-pub fn run(secret_len: u8) {
+pub fn run(secret_len: usize) {
     let mut game: Game = Game::new(secret_len);
 
     game.start_screen();

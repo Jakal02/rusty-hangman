@@ -2,6 +2,8 @@ use std::fmt;
 use std::collections::HashSet;
 use std::io::{stdin, stdout, Read, Write};
 
+use crate::dictionary::Dictionary;
+
 pub struct Game {
     secret_word: String,
     previous_guesses: HashSet<char>,
@@ -14,7 +16,7 @@ pub enum GameResult {
 }
 
 impl Game {
-    pub fn new(s_len: u8) -> Game {
+    pub fn new(s_len: usize) -> Game {
         Game {
             secret_word: Self::select_secret_word(s_len),
             previous_guesses: vec![].into_iter().collect(),
@@ -26,8 +28,12 @@ impl Game {
         &self.secret_word
     }
 
-    fn select_secret_word(_s_len: u8) -> String {
-        "secret".to_string().to_uppercase()
+    fn select_secret_word(s_len: usize) -> String {
+        let dict: Dictionary = Dictionary::new("./src/words.txt");
+        if s_len < dict.min_len || s_len > dict.max_len {
+            panic!("No word exists with length {}. Range is from {} to {} characters.", s_len, dict.min_len, dict.max_len);
+        }
+        dict.rdm_word_with_length(s_len).to_string()
     }
 
     
