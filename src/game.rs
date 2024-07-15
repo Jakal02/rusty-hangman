@@ -6,7 +6,7 @@ use crate::dictionary::Dictionary;
 
 pub struct Game {
     secret_word: String,
-    previous_guesses: HashSet<char>,
+    previous_guesses: Vec<char>,
     num_guesses: u8,
 }
 
@@ -19,7 +19,7 @@ impl Game {
     pub fn new(s_len: usize) -> Game {
         Game {
             secret_word: Self::select_secret_word(s_len),
-            previous_guesses: vec![].into_iter().collect(),
+            previous_guesses: vec![],
             num_guesses: 6,
         }
     }
@@ -85,8 +85,7 @@ impl Game {
     /// Record this guess and decrease number of guesses left 
     /// if `guess` is not in the secret word.
     fn record_guess(&mut self, guess:char) {
-        self.previous_guesses.insert(guess);
-        self.previous_guesses.insert(guess);
+        self.previous_guesses.push(guess);
         if !self.secret_word.contains(guess) {
             self.num_guesses -= 1;
         }
@@ -98,7 +97,8 @@ impl Game {
             return Some(GameResult::Stumped)
         }
         let secret_chars: HashSet<char> = self.secret_word.chars().into_iter().collect();
-        if secret_chars.is_subset(&self.previous_guesses) {
+        let set_of_prev: HashSet<char> = HashSet::from_iter(self.previous_guesses.iter().cloned());
+        if secret_chars.is_subset(&set_of_prev) {
             return Some(GameResult::Guessed)
         }
         None
